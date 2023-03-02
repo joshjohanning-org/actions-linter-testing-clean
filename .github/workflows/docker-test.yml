@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  
+env:
+  image-repository: ghcr.io
+
+jobs:
+  build:
+    name: build
+    uses: joshjohanning-org/reusable-workflows/.github/workflows/docker-build.yml@d255a01a1d478e0deb7a7a04291896fa4978fe4e
+    with:
+      runs-on: k8s-runner
+      image-repository: ${{ env.image-repository }}
+      image-name: ${{ github.repository }}
+      image-tag: ${{ github.run_number }}
+      dockerfile-path: Dockerfile
